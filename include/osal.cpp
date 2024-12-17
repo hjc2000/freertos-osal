@@ -21,12 +21,24 @@
 
 void *os_malloc(size_t size)
 {
-    return malloc(size);
+    try
+    {
+        return new uint8_t[size];
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
 }
 
 void os_free(void *ptr)
 {
-    free(ptr);
+    if (ptr == nullptr)
+    {
+        return;
+    }
+
+    delete[] reinterpret_cast<uint8_t *>(ptr);
 }
 
 os_thread_t *os_thread_create(char const *name,
@@ -176,8 +188,7 @@ void os_mbox_destroy(os_mbox_t *mbox)
 
 static void os_timer_callback(TimerHandle_t xTimer)
 {
-    os_timer_t *timer = pvTimerGetTimerID(xTimer);
-
+    os_timer_t *timer = reinterpret_cast<os_timer_t *>(pvTimerGetTimerID(xTimer));
     if (timer->fn)
     {
         timer->fn(timer, timer->arg);
@@ -189,9 +200,7 @@ os_timer_t *os_timer_create(uint32_t us,
                             void *arg,
                             bool oneshot)
 {
-    os_timer_t *timer;
-
-    timer = malloc(sizeof(*timer));
+    os_timer_t *timer = new os_timer_t{};
     CC_ASSERT(timer != NULL);
 
     timer->fn = fn;
@@ -227,7 +236,7 @@ void os_timer_stop(os_timer_t *timer)
 void os_timer_destroy(os_timer_t *timer)
 {
     CC_ASSERT(xTimerDelete(timer->handle, portMAX_DELAY) == pdPASS);
-    free(timer);
+    delete timer;
 }
 
 void assert_report(bool exp, char const *file, char const *function, int line)
