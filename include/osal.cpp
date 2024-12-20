@@ -53,7 +53,12 @@ os_thread_t *os_thread_create(char const *name,
      * divided by the stack width */
     configSTACK_DEPTH_TYPE stackdepth = stacksize / sizeof(configSTACK_DEPTH_TYPE);
 
-    if (xTaskCreate(entry, name, stackdepth, arg, priority, &xHandle) == pdPASS)
+    if (xTaskCreate(entry,
+                    name,
+                    stackdepth,
+                    arg,
+                    priority,
+                    &xHandle) == pdPASS)
     {
         return (os_thread_t *)xHandle;
     }
@@ -168,7 +173,6 @@ os_mbox_t *os_mbox_create(size_t size)
 bool os_mbox_fetch(os_mbox_t *mbox, void **msg, uint32_t time)
 {
     BaseType_t success;
-
     success = xQueueReceive((QueueHandle_t)mbox, msg, TMO_TO_TICKS(time));
     return success != pdTRUE;
 }
@@ -176,7 +180,6 @@ bool os_mbox_fetch(os_mbox_t *mbox, void **msg, uint32_t time)
 bool os_mbox_post(os_mbox_t *mbox, void *msg, uint32_t time)
 {
     BaseType_t success;
-
     success = xQueueSendToBack((QueueHandle_t)mbox, &msg, TMO_TO_TICKS(time));
     return success != pdTRUE;
 }
