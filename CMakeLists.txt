@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.20)
 include($ENV{cpp_lib_build_scripts_path}/cmake-module/setup.cmake)
-include(target_import_freertos)
 include(target_import_stm32h743iit6_hal)
+include(target_import_freertos)
+include(target_import_bsp_interface)
 
 set(ProjectName freertos-osal)
 project(${ProjectName})
@@ -14,5 +15,6 @@ add_library(${ProjectName})
 target_import_src(${ProjectName})
 target_import_stm32h743iit6_hal(${ProjectName} PUBLIC)
 target_import_freertos(${ProjectName} PUBLIC)
+target_import_bsp_interface(${ProjectName} PUBLIC)
 
 set(CMAKE_INSTALL_PREFIX $ENV{cpp_lib_build_scripts_path}/${platform}/.libs/${ProjectName}/)
