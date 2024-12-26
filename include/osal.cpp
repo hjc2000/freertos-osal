@@ -13,6 +13,8 @@
  * full license information.
  ********************************************************************/
 
+#include <bsp-interface/di/delayer.h>
+#include <bsp-interface/di/system_time.h>
 #include <osal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -92,12 +94,13 @@ void os_mutex_destroy(os_mutex_t *mutex)
 
 void os_usleep(uint32_t us)
 {
-    vTaskDelay((us / portTICK_PERIOD_MS) / 1000);
+    DI_Delayer().Delay(std::chrono::microseconds{us});
 }
 
 uint32_t os_get_current_time_us(void)
 {
-    return 1000 * (xTaskGetTickCount() / portTICK_PERIOD_MS);
+    base::Seconds now = DI_SystemTime();
+    return static_cast<std::chrono::microseconds>(now).count();
 }
 
 os_sem_t *os_sem_create(size_t count)
