@@ -92,5 +92,5 @@ void os_log(uint8_t type, char const *fmt, ...)
     vsnprintf(_buffer + len, sizeof(_buffer) - len, fmt, list);
     va_end(list);
 
-    DI_Console().Write(_buffer);
+    DI_Console().WriteLine(_buffer);
 }
