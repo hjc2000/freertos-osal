@@ -2931,7 +2931,6 @@ extern void vApplicationIdleHook(void);
 extern void vApplicationTickHook(void);
 extern void vApplicationMallocFailedHook(void);
 extern void vApplicationDaemonTaskStartupHook(void);
-extern void vApplicationStackOverflowHook(TaskHandle_t xTask, signed char *pcTaskName);
 
 /**
   Dummy implementation of the callback function vApplicationIdleHook().
@@ -2966,18 +2965,6 @@ __WEAK void vApplicationMallocFailedHook(void)
 #if (configUSE_DAEMON_TASK_STARTUP_HOOK == 1)
 __WEAK void vApplicationDaemonTaskStartupHook(void)
 {
-}
-#endif
-
-/**
-  Dummy implementation of the callback function vApplicationStackOverflowHook().
-*/
-#if (configCHECK_FOR_STACK_OVERFLOW > 0)
-__WEAK void vApplicationStackOverflowHook(TaskHandle_t xTask, signed char *pcTaskName)
-{
-    (void)xTask;
-    (void)pcTaskName;
-    configASSERT(0);
 }
 #endif
 
