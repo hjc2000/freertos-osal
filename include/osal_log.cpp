@@ -17,7 +17,7 @@
 #include <base/di/SingletonGetter.h>
 #include <base/task/IMutex.h>
 #include <bsp-interface/di/console.h>
-#include <bsp-interface/di/task.h>
+#include <bsp-interface/di/interrupt.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
@@ -33,12 +33,22 @@ namespace
     };
 
     class Getter :
-        public bsp::TaskSingletonGetter<MutexProvider>
+        public base::SingletonGetter<MutexProvider>
     {
     public:
         std::unique_ptr<MutexProvider> Create() override
         {
             return std::unique_ptr<MutexProvider>{new MutexProvider{}};
+        }
+
+        void Lock() override
+        {
+            DI_DisableGlobalInterrupt();
+        }
+
+        void Unlock() override
+        {
+            DI_EnableGlobalInterrupt();
         }
     };
 } // namespace
