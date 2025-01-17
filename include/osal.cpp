@@ -94,7 +94,7 @@ void os_mutex_destroy(os_mutex_t *mutex)
 
 void os_usleep(uint32_t us)
 {
-    DI_Delayer().Delay(std::chrono::microseconds{us});
+    bsp::di::Delayer().Delay(std::chrono::microseconds{us});
 }
 
 uint32_t os_get_current_time_us(void)
