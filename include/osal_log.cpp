@@ -29,7 +29,7 @@ namespace
     class MutexProvider
     {
     public:
-        std::shared_ptr<base::IMutex> _lock = base::di::CreateMutex();
+        std::shared_ptr<base::IMutex> _lock = base::di::CreateIMutex();
     };
 
     class Getter :
