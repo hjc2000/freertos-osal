@@ -12,11 +12,6 @@ if(1)
 	set(CMAKE_C_STANDARD 17)
 endif()
 
-
-include(target_import_stm32h743iit6_hal)
-include(target_import_freertos)
-include(target_import_bsp_interface)
-
 add_library(${ProjectName})
 target_import_src(${ProjectName})
 target_import_stm32h743iit6_hal(${ProjectName} PUBLIC)
