@@ -14,10 +14,10 @@
  ********************************************************************/
 
 #include "osal_log.h"
+#include "base/define.h"
 #include <base/task/IMutex.h>
 #include <bsp-interface/di/console.h>
 #include <bsp-interface/di/interrupt.h>
-#include <bsp-interface/TaskSingletonGetter.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
@@ -26,27 +26,19 @@ namespace
 {
 	char _buffer[1024];
 
-	class MutexProvider
+	base::IMutex &MutexInstance()
 	{
-	public:
-		std::shared_ptr<base::IMutex> _lock = base::CreateIMutex();
-	};
+		static std::shared_ptr<base::IMutex> o = base::CreateIMutex();
+		return *o;
+	}
 
-	class Getter :
-		public bsp::TaskSingletonGetter<MutexProvider>
-	{
-	public:
-		std::unique_ptr<MutexProvider> Create() override
-		{
-			return std::unique_ptr<MutexProvider>{new MutexProvider{}};
-		}
-	};
 } // namespace
+
+PREINIT(MutexInstance)
 
 void os_log(uint8_t type, char const *fmt, ...)
 {
-	Getter g;
-	base::LockGuard lg{*g.Instance()._lock};
+	base::LockGuard lg{MutexInstance()};
 
 	// 初始化缓冲区
 	_buffer[0] = '\0';
