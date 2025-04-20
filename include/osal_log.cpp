@@ -14,10 +14,8 @@
  ********************************************************************/
 
 #include "osal_log.h"
-#include "base/define.h"
-#include <base/task/IMutex.h>
-#include <bsp-interface/di/console.h>
-#include <bsp-interface/di/interrupt.h>
+#include "base/task/Mutex.h"
+#include "bsp-interface/di/console.h"
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
@@ -25,20 +23,13 @@
 namespace
 {
 	char _buffer[1024];
-
-	base::IMutex &MutexInstance()
-	{
-		static std::shared_ptr<base::IMutex> o = base::CreateIMutex();
-		return *o;
-	}
+	base::task::Mutex _mutex{};
 
 } // namespace
 
-PREINIT(MutexInstance)
-
 void os_log(uint8_t type, char const *fmt, ...)
 {
-	base::LockGuard lg{MutexInstance()};
+	base::task::MutexGuard g{_mutex};
 
 	// 初始化缓冲区
 	_buffer[0] = '\0';
