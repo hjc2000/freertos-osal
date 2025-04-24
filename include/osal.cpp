@@ -13,7 +13,7 @@
  * full license information.
  ********************************************************************/
 
-#include "base/peripheral/systick/systick.h"
+#include "base/embedded/systick/systick.h"
 #include "base/task/delay.h"
 #include "base/unit/Nanoseconds.h"
 #include <osal.h>
