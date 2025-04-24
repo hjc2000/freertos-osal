@@ -13,8 +13,9 @@
  * full license information.
  ********************************************************************/
 
+#include "base/peripheral/systick/systick.h"
 #include "base/task/delay.h"
-#include <bsp-interface/di/system_time.h>
+#include "base/unit/Nanoseconds.h"
 #include <osal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -99,7 +100,7 @@ void os_usleep(uint32_t us)
 
 uint32_t os_get_current_time_us(void)
 {
-	base::Seconds now = DI_SystemTime();
+	base::Nanoseconds now = base::systick::system_time_stamp();
 	return static_cast<std::chrono::microseconds>(now).count();
 }
 
