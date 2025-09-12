@@ -65,5 +65,5 @@ void os_log(uint8_t type, char const *fmt, ...)
 	vsnprintf(_buffer + len, sizeof(_buffer) - len, fmt, list);
 	va_end(list);
 
-	base::console.WriteLine(_buffer);
+	base::console().WriteLine(_buffer);
 }
